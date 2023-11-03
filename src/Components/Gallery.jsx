@@ -1,5 +1,20 @@
 import React, { useState } from "react";
 import ImageCard from "./ImageCard";
+import {
+  DndContext,
+  DragOverlay,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import Image from "./Image";
 
 const Gallery = () => {
   const GalleryData = [
@@ -48,44 +63,77 @@ const Gallery = () => {
       image: "/images/image-1.webp",
     },
   ];
-  const [data, setData] = useState([...GalleryData]);
-  // console.log(data);
+
+  const [items, setItems] = useState([...GalleryData]);
+  console.log(items);
+  const [activeId, setActiveId] = useState(null);
+  console.log(activeId, "activeId");
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   // for selecting and deselecting a single image
   const handleSelect = (id) => {
-    const newData = data.map((item) => {
+    const newData = items.map((item) => {
       if (item.id === id) {
         return { ...item, selected: !item.selected };
       } else {
         return { ...item };
       }
     });
-    setData([...newData]);
+    setItems([...newData]);
   };
 
   // for selecting and deselecting all images
-  const selelctOrDeselectAll = () => {
-    if (data.every((item) => item.selected === true)) {
-      const newData = data.map((item) => {
+  const selectOrDeselectAll = () => {
+    if (items.every((item) => item.selected === true)) {
+      const newData = items.map((item) => {
         return { ...item, selected: false };
       });
-      setData([...newData]);
+      setItems([...newData]);
     } else {
-      const newData = data.map((item) => {
+      const newData = items.map((item) => {
         return { ...item, selected: true };
       });
-      setData([...newData]);
+      setItems([...newData]);
     }
   };
 
   // for counting the total selected images
-  const totalSelected = data.filter((item) => item.selected === true).length;
+  const totalSelected = items.filter((item) => item.selected === true).length;
 
   // for deleting the selected images
   const handleDelete = () => {
-    const newData = data.filter((item) => item.selected !== true);
-    setData([...newData]);
+    const newData = items.filter((item) => item.selected !== true);
+    setItems([...newData]);
   };
+
+  function handleDragStart(event) {
+    //added extra id(s) !!!!!!!!!!!
+    // console.log(event, "eventstart");
+    setActiveId(event.active.id.id);
+  }
+
+  function handleDragEnd(event) {
+    // console.log(event.active, "eventend");
+    const { active, over } = event;
+    // console.log(active, over, "active, over");
+
+    if (active.id.id !== over.id.id) {
+      //added extra id(s) !!!!!!!!!!!
+      setItems((items) => {
+        const oldIndex = items.indexOf(active.id.id);
+        // console.log(oldIndex, "oldIndex");
+        const newIndex = items.indexOf(over.id.id);
+        // console.log(newIndex, "newIndex");
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+
+    setActiveId(null);
+  }
+
+  function handleDragCancel() {
+    setActiveId(null);
+  }
 
   return (
     <div className="bg-white pt-3 rounded w-100 lg:w-2/3 mx-auto">
@@ -97,9 +145,10 @@ const Gallery = () => {
               name=""
               id=""
               checked={
-                data.every((item) => item.selected === true) && data.length > 0
+                items.every((item) => item.selected === true) &&
+                items.length > 0
               }
-              onChange={selelctOrDeselectAll}
+              onChange={selectOrDeselectAll}
               className={`mt-2 md:ml-8 cursor-pointer w-4 h-4`}
             />
             <h1 className="pb-3 ps-2 text-xl font-bold ">
@@ -111,7 +160,7 @@ const Gallery = () => {
         )}
         <button
           className={`text-red-600 font-semibold pb-3 pr-8 ${
-            !data.some((item) => item.selected === true) && "hidden"
+            !items.some((item) => item.selected === true) && "hidden"
           }`}
           onClick={handleDelete}
         >
@@ -120,30 +169,34 @@ const Gallery = () => {
       </div>
       <hr />
       <div className="ps-8 p-5">
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-          {!!Boolean(data.length) ? (
-            data?.map((data, index) => (
-              <ImageCard
-                key={index}
-                data={data}
-                index={index}
-                handleSelect={handleSelect}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragCancel={handleDragCancel}
+        >
+          <SortableContext items={items} strategy={rectSortingStrategy}>
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+              {items?.map((item, index) => (
+                <ImageCard
+                  key={index}
+                  item={item}
+                  index={index}
+                  handleSelect={handleSelect}
+                />
+              ))}
+            </div>
+          </SortableContext>
+          <DragOverlay adjustScale={true}>
+            {activeId ? (
+              <Image
+                imageLink={activeId.image}
+                index={items?.indexOf(activeId)}
               />
-            ))
-          ) : (
-            <>
-              <h1 className="col-span-5 mt-5 mb-2 text-center text-red-600 text-2xl font-bold">
-                Opps! The Galley Got Upset &#128546;
-              </h1>
-              <button
-                className="col-span-5 px-2 py-2 pb-3 mb-6 text-center bg-red-400 text-white w-full md:w-1/3 lg:w-1/4 mx-auto text-xl font-semibold rounded-md hover:bg-green-400 transition duration-200 ease-in-out"
-                onClick={() => location.reload()}
-              >
-                Lets get them back
-              </button>
-            </>
-          )}
-        </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
       </div>
     </div>
   );
