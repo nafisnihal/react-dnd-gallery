@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.0.8",
-    "@dnd-kit/sortable": "^7.0.2",
+    "@dnd-kit/core": "^6.0.8-next-202311924325",
+    "@dnd-kit/sortable": "^7.0.2-next-202304205747",
+    "@dnd-kit/utilities": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

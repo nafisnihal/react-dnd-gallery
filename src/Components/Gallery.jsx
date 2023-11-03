@@ -133,7 +133,7 @@ const Gallery = () => {
           ) : (
             <>
               <h1 className="col-span-5 mt-5 mb-2 text-center text-red-600 text-2xl font-bold">
-                Opps! The Galley Got Hurt &#128546;
+                Opps! The Galley Got Upset &#128546;
               </h1>
               <button
                 className="col-span-5 px-2 py-2 pb-3 mb-6 text-center bg-red-400 text-white w-full md:w-1/3 lg:w-1/4 mx-auto text-xl font-semibold rounded-md hover:bg-green-400 transition duration-200 ease-in-out"
