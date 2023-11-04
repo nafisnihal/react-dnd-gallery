@@ -4,9 +4,16 @@ import { CSS } from "@dnd-kit/utilities";
 import Image from "./Image";
 
 const ImageCard = (props) => {
-  // console.log(props, "props");
-  const sortable = useSortable({ id: props.item.id });
-  const { attributes, listeners, setNodeRef, transform, transition } = sortable;
+  console.log(props, "props");
+  const sortable = useSortable({ id: props.item });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    isDragging,
+    transform,
+    transition,
+  } = sortable;
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -21,16 +28,17 @@ const ImageCard = (props) => {
     >
       <input
         type="checkbox"
-        onChange={() => props.handleSelect(props.item.id)}
+        onChange={() => props.handleSelect(props.imageData.id)}
         className={`absolute mt-2 ml-2 cursor-pointer w-4 h-4 opacity-0  ${
-          !!Boolean(props.item?.selected) && "opacity-100 outline-0"
+          !!Boolean(props.imageData?.selected) && "opacity-100 outline-0"
         } group-hover:opacity-100 transition duration-500 ease-in-out`}
-        checked={props.item?.selected ? true : false}
+        checked={props.imageData?.selected ? true : false}
       />
       <Image
         ref={setNodeRef}
+        imageData={props.imageData}
+        isDragging={isDragging}
         style={style}
-        // index={index}
         {...attributes}
         {...listeners}
         {...props}
