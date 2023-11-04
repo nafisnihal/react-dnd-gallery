@@ -1,8 +1,11 @@
 import React, { forwardRef } from "react";
 
 const Image = forwardRef(
-  ({ index, imageLink, faded, style, ...props }, ref) => {
-    // console.log(imageLink, "imageLink");
+  (
+    { image, index, imageData, overlay, isDragging, faded, style, ...props },
+    ref
+  ) => {
+    console.log(imageData, "imageData");
     const moreStyles = {
       opacity: faded ? 0.2 : 1,
       ...style,
@@ -14,7 +17,7 @@ const Image = forwardRef(
         style={moreStyles}
         {...props}
       >
-        <img src={props.item.image || imageLink} alt={index} />
+        <img src={imageData?.image} alt={index} />
       </div>
     );
   }
