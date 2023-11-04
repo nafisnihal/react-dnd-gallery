@@ -4,6 +4,7 @@ import SortableGallery from "./SortableGallery";
 
 const Gallery = () => {
   const [images, setImages] = useState([...GalleryData]);
+  console.log(images, "images");
 
   // for selecting and deselecting a single image
   const handleSelect = (id) => {

@@ -13,50 +13,45 @@ import {
   arrayMove,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import ImageCard from "./ImageCard";
-import Image from "./Image";
+import SortablePhotos from "./SortablePhotos";
+import PhotoCard from "./PhotoCard";
 
 const SortableGallery = ({ images, handleSelect }) => {
-  console.log(images, "images");
-  const [items, setItems] = useState(
-    [...images].map((item) => item?.id?.toString())
-  );
-  console.log(items, "items");
+  //   console.log(images, "images");
+  const [items, setItems] = useState([...images].map((item) => item?.id));
+  //   console.log(items, "items");
 
   useEffect(() => {
-    setItems([...images].map((item) => item?.id?.toString()));
+    setItems([...images].map((item) => item?.id));
   }, [images]);
   // console.log(items);
   const [activeId, setActiveId] = useState(null);
-  console.log(activeId, "activeId");
+  //   console.log(activeId, "activeId");
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   function handleDragStart(event) {
-    setActiveId(event.active.id);
+    const [active] = images.filter((item) => item.id === event.active.id);
+    setActiveId(active);
   }
 
   function handleDragEnd(event) {
-    // console.log(event.active, "eventend");
     const { active, over } = event;
-    // console.log(active, over, "active, over");
 
-    if (active.id !== over.id) {
-      //added extra id(s) !!!!!!!!!!!
+    if (active?.id !== over?.id) {
       setItems((items) => {
-        const oldIndex = items.indexOf(active.id);
-        // console.log(oldIndex, "oldIndex");
-        const newIndex = items.indexOf(over.id);
-        // console.log(newIndex, "newIndex");
+        const oldIndex = items.indexOf(active?.id);
+        const newIndex = items.indexOf(over?.id);
+
         return arrayMove(items, oldIndex, newIndex);
       });
     }
-
     setActiveId(null);
   }
 
   function handleDragCancel() {
     setActiveId(null);
   }
+
   return (
     <DndContext
       sensors={sensors}
@@ -68,13 +63,13 @@ const SortableGallery = ({ images, handleSelect }) => {
       <SortableContext items={items} strategy={rectSortingStrategy}>
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
           {items?.map((item, index) => {
-            const [imageData] = images.filter((image) => image.id == item);
+            const [imageData] = images.filter((image) => image?.id == item);
             return (
-              <ImageCard
+              <SortablePhotos
                 key={item}
                 item={item}
                 index={index}
-                imageData={imageData}
+                image={imageData}
                 handleSelect={handleSelect}
               />
             );
@@ -83,7 +78,12 @@ const SortableGallery = ({ images, handleSelect }) => {
       </SortableContext>
       <DragOverlay adjustScale={true}>
         {activeId ? (
-          <Image index={items.indexOf(activeId)} image={activeId} overlay />
+          <PhotoCard
+            index={items.indexOf(activeId)}
+            image={activeId}
+            handleSelect={handleSelect}
+            overlay
+          />
         ) : null}
       </DragOverlay>
     </DndContext>
