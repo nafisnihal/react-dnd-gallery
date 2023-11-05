@@ -4,40 +4,37 @@ import SortableGallery from "./SortableGallery";
 
 const Gallery = () => {
   const [images, setImages] = useState([...GalleryData]);
+  const [isChecked, setIsChecked] = useState([]);
+  // console.log(isChecked, "isChecked");
 
-  // for selecting and deselecting a single image
-  const handleSelect = (id) => {
-    const newData = images.map((image) => {
-      if (image.id === id) {
-        return { ...image, selected: !image.selected };
-      } else {
-        return { ...image };
-      }
-    });
-    setImages([...newData]);
-  };
-  // for selecting and deselecting all images
-  const selectOrDeselectAll = () => {
-    if (images.every((image) => image.selected === true)) {
-      const newData = images.map((image) => {
-        return { ...image, selected: false };
-      });
-      setImages([...newData]);
+  // for selecting and deselecting ids using checkbox and update isChecked state
+  const handleCheck = (id) => {
+    if (isChecked.includes(id)) {
+      const newData = isChecked.filter((item) => item !== id);
+      setIsChecked([...newData]);
     } else {
-      const newData = images.map((image) => {
-        return { ...image, selected: true };
-      });
-      setImages([...newData]);
+      setIsChecked([...isChecked, id]);
     }
   };
+
+  // for selecting and deselecting all images
+  const selectOrDeselectAll = () => {
+    if (isChecked.length === images.length) {
+      setIsChecked([]);
+    } else {
+      const newData = images.map((image) => image.id);
+      setIsChecked([...newData]);
+    }
+  };
+
   // for counting the total selected images
-  const totalSelected = images.filter(
-    (image) => image.selected === true
-  ).length;
-  // for deleting the selected images
+  const totalSelected = isChecked.length;
+
+  // delete images id isChecked
   const handleDelete = () => {
-    const newData = images.filter((image) => image.selected !== true);
+    const newData = images.filter((image) => !isChecked.includes(image.id));
     setImages([...newData]);
+    setIsChecked([]);
   };
 
   return (
@@ -49,10 +46,7 @@ const Gallery = () => {
               type="checkbox"
               name=""
               id=""
-              checked={
-                images.every((item) => item.selected === true) &&
-                images.length > 0
-              }
+              isChecked={isChecked.length === images.length}
               onChange={selectOrDeselectAll}
               className={`mt-2 md:ml-5 cursor-pointer w-4 h-4`}
             />
@@ -65,7 +59,7 @@ const Gallery = () => {
         )}
         <button
           className={`text-red-600 font-semibold pb-3 pr-8 ${
-            !images.some((item) => item.selected === true) && "hidden"
+            totalSelected < 1 && "invisible"
           }`}
           onClick={handleDelete}
         >
@@ -74,7 +68,11 @@ const Gallery = () => {
       </div>
       <hr />
       <div className="p-5">
-        <SortableGallery images={images} handleSelect={handleSelect} />
+        <SortableGallery
+          images={images}
+          handleSelect={handleCheck}
+          isChecked={isChecked}
+        />
       </div>
     </div>
   );

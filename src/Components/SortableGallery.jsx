@@ -16,11 +16,10 @@ import {
 import SortablePhotos from "./SortablePhotos";
 import PhotoCard from "./PhotoCard";
 
-const SortableGallery = ({ images, handleSelect }) => {
+const SortableGallery = ({ images, handleSelect, isChecked }) => {
   const [items, setItems] = useState([...images].map((item) => item?.id));
 
   const [activeId, setActiveId] = useState(null);
-  //   console.log(activeId, "activeId");
 
   useEffect(() => {
     setItems([...images].map((item) => item?.id));
@@ -65,25 +64,23 @@ const SortableGallery = ({ images, handleSelect }) => {
             const [imageData] = images.filter((image) => image?.id == item);
             return (
               <div
-                className={`relative ${
-                  index == 0 && "col-span-2 row-span-2"
+                key={item}
+                className={`relative ${index == 0 && "col-span-2 row-span-2"} ${
+                  isChecked?.includes(imageData?.id) && "brightness-90"
                 } group`}
               >
-                <SortablePhotos
-                  key={item}
-                  item={item}
-                  index={index}
-                  image={imageData}
-                />
+                <SortablePhotos item={item} index={index} image={imageData} />
                 <input
                   type="checkbox"
                   name="checkbox"
                   id={`checked-${imageData?.id}`}
-                  className={`absolute top-2 left-3 w-4 h-4 cursor-pointer z-50 opacity-0 group-hover:opacity-100 ${
-                    imageData?.selected ? "opacity-100" : "opacity-0"
+                  className={`absolute top-2 left-3 w-4 h-4 cursor-pointer z-50 group-hover:opacity-100 ${
+                    isChecked?.includes(imageData?.id)
+                      ? "opacity-100"
+                      : "opacity-0"
                   } transition-all duration-400 ease-in-out`}
-                  onClick={() => handleSelect(imageData?.id)}
-                  checked={imageData?.selected ? true : false}
+                  onChange={() => handleSelect(imageData?.id)}
+                  checked={isChecked?.includes(imageData?.id) ? true : false}
                 />
               </div>
             );
@@ -92,12 +89,7 @@ const SortableGallery = ({ images, handleSelect }) => {
       </SortableContext>
       <DragOverlay adjustScale={true}>
         {activeId ? (
-          <PhotoCard
-            index={items.indexOf(activeId)}
-            image={activeId}
-            handleMark={handleSelect}
-            overlay
-          />
+          <PhotoCard index={items.indexOf(activeId)} image={activeId} overlay />
         ) : null}
       </DragOverlay>
     </DndContext>
