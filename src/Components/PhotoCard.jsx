@@ -1,35 +1,23 @@
 import React, { forwardRef } from "react";
 import Photo from "./Photo";
 const PhotoCard = forwardRef(
-  (
-    { image, index, handleSelect, overlay, isDragging, faded, style, ...props },
-    ref
-  ) => {
-    // console.log(index, "indexbedfh");
+  // ref is used for dnd-kit to get the node of the component -- got from dnd-kit docs
+  ({ image, index, isDragging, faded, style, ...props }, ref) => {
     const moreStyles = {
       opacity: faded ? "0.2" : "1",
       transformOrigin: "0 0",
-      gridRowStart: index === 0 ? "span 2" : null,
-      gridColumnStart: index === 0 ? "span 2" : null,
       backgroundSize: "cover",
       backgroundPosition: "center",
-      backgroundColor: "#ffffff",
       ...style,
     };
     return (
       <div
-        className={`rounded-lg overflow-hidden`}
+        className={`rounded-lg overflow-hidden bg-white group-hover:opacity-100 group-hover:brightness-50 group-hover:transition-all group-hover:duration-300 group-hover:ease-in-out`}
         ref={ref}
         style={moreStyles}
         {...props}
       >
-        <Photo
-          image={image}
-          index={index}
-          handleSelect={handleSelect}
-          overlay={overlay}
-          isDragging={isDragging}
-        />
+        <Photo image={image} isDragging={isDragging} />
       </div>
     );
   }

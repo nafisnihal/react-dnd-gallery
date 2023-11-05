@@ -1,7 +1,7 @@
 export const GalleryData = [
   {
     id: 1,
-    image: "/images/image-11.jpeg",
+    image: "/images/image-11.webp",
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const GalleryData = [
   },
   {
     id: 7,
-    image: "/images/image-10.jpeg",
+    image: "/images/image-10.webp",
   },
   {
     id: 8,
