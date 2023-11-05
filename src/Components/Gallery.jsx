@@ -4,7 +4,6 @@ import SortableGallery from "./SortableGallery";
 
 const Gallery = () => {
   const [images, setImages] = useState([...GalleryData]);
-  console.log(images, "images");
 
   // for selecting and deselecting a single image
   const handleSelect = (id) => {
@@ -42,7 +41,7 @@ const Gallery = () => {
   };
 
   return (
-    <div className="bg-white pt-3 rounded w-100 lg:w-2/3 mx-auto">
+    <div className="bg-white pt-3 rounded w-100 lg:w-3/4 mx-auto">
       <div className="flex flex-col md:flex-row align-middle justify-between">
         {totalSelected >= 1 ? (
           <div className="flex align-middle justify-center md:justify-start">
@@ -55,14 +54,14 @@ const Gallery = () => {
                 images.length > 0
               }
               onChange={selectOrDeselectAll}
-              className={`mt-2 md:ml-8 cursor-pointer w-4 h-4`}
+              className={`mt-2 md:ml-5 cursor-pointer w-4 h-4`}
             />
             <h1 className="pb-3 ps-2 text-xl font-bold ">
               {totalSelected} {totalSelected > 1 ? "Files " : "File "} Selected
             </h1>
           </div>
         ) : (
-          <h1 className="pb-3 ps-8 text-xl font-bold">Gallery</h1>
+          <h1 className="pb-3 ps-5 text-xl font-bold">Gallery</h1>
         )}
         <button
           className={`text-red-600 font-semibold pb-3 pr-8 ${
@@ -74,7 +73,7 @@ const Gallery = () => {
         </button>
       </div>
       <hr />
-      <div className="ps-8 p-5">
+      <div className="p-5">
         <SortableGallery images={images} handleSelect={handleSelect} />
       </div>
     </div>

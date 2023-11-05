@@ -17,16 +17,15 @@ import SortablePhotos from "./SortablePhotos";
 import PhotoCard from "./PhotoCard";
 
 const SortableGallery = ({ images, handleSelect }) => {
-  //   console.log(images, "images");
   const [items, setItems] = useState([...images].map((item) => item?.id));
-  //   console.log(items, "items");
+
+  const [activeId, setActiveId] = useState(null);
+  //   console.log(activeId, "activeId");
 
   useEffect(() => {
     setItems([...images].map((item) => item?.id));
   }, [images]);
-  // console.log(items);
-  const [activeId, setActiveId] = useState(null);
-  //   console.log(activeId, "activeId");
+
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   function handleDragStart(event) {
@@ -61,17 +60,32 @@ const SortableGallery = ({ images, handleSelect }) => {
       onDragCancel={handleDragCancel}
     >
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
           {items?.map((item, index) => {
             const [imageData] = images.filter((image) => image?.id == item);
             return (
-              <SortablePhotos
-                key={item}
-                item={item}
-                index={index}
-                image={imageData}
-                handleSelect={handleSelect}
-              />
+              <div
+                className={`relative ${
+                  index == 0 && "col-span-2 row-span-2"
+                } group`}
+              >
+                <SortablePhotos
+                  key={item}
+                  item={item}
+                  index={index}
+                  image={imageData}
+                />
+                <input
+                  type="checkbox"
+                  name="checkbox"
+                  id={`checked-${imageData?.id}`}
+                  className={`absolute top-2 left-3 w-4 h-4 cursor-pointer z-50 opacity-0 group-hover:opacity-100 ${
+                    imageData?.selected ? "opacity-100" : "opacity-0"
+                  } transition-all duration-400 ease-in-out`}
+                  onClick={() => handleSelect(imageData?.id)}
+                  checked={imageData?.selected ? true : false}
+                />
+              </div>
             );
           })}
         </div>
@@ -81,7 +95,7 @@ const SortableGallery = ({ images, handleSelect }) => {
           <PhotoCard
             index={items.indexOf(activeId)}
             image={activeId}
-            handleSelect={handleSelect}
+            handleMark={handleSelect}
             overlay
           />
         ) : null}

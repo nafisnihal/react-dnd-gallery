@@ -21,7 +21,6 @@ const SortablePhotos = (props) => {
   return (
     <PhotoCard
       ref={setNodeRef}
-      product={props.image}
       isDragging={isDragging}
       style={style}
       {...attributes}
