@@ -15,6 +15,7 @@ import {
 } from "@dnd-kit/sortable";
 import SortablePhotos from "./SortablePhotos";
 import PhotoCard from "./PhotoCard";
+import UploadImage from "./UploadImage";
 
 const SortableGallery = ({ images, handleSelect, isChecked }) => {
   const [items, setItems] = useState([...images].map((item) => item?.id));
@@ -66,7 +67,8 @@ const SortableGallery = ({ images, handleSelect, isChecked }) => {
               <div
                 key={item}
                 className={`relative ${index == 0 && "col-span-2 row-span-2"} ${
-                  isChecked?.includes(imageData?.id) && "brightness-90"
+                  isChecked?.includes(imageData?.id) &&
+                  "opacity-50 brightness-95 transition-all duration-300 ease-in-out"
                 } group`}
               >
                 <SortablePhotos item={item} index={index} image={imageData} />
@@ -74,7 +76,7 @@ const SortableGallery = ({ images, handleSelect, isChecked }) => {
                   type="checkbox"
                   name="checkbox"
                   id={`checked-${imageData?.id}`}
-                  className={`absolute top-2 left-3 w-4 h-4 cursor-pointer z-50 group-hover:opacity-100 ${
+                  className={`absolute top-4 left-4 w-5 h-5 cursor-pointer z-50 group-hover:opacity-100 ${
                     isChecked?.includes(imageData?.id)
                       ? "opacity-100"
                       : "opacity-0"
@@ -85,6 +87,8 @@ const SortableGallery = ({ images, handleSelect, isChecked }) => {
               </div>
             );
           })}
+          {/* upload image grid item */}
+          <UploadImage />
         </div>
       </SortableContext>
       <DragOverlay adjustScale={true}>

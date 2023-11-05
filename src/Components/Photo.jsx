@@ -1,13 +1,10 @@
 import React from "react";
 
-const Photo = ({ image, isDragging, overlay }) => {
+const Photo = ({ image, isDragging }) => {
   return (
-    <div className=" border rounded-lg overflow-hidden shadow relative group w-full h-full">
-      {/* <div
-        className={`absolute h-full w-full bg-black/30 flex items-center transition-all duration-300 ease-in-out justify-center  ${
-          isDragging || overlay ? "" : "group-hover:opacity-100 "
-        }  ${isDragging && "opacity-0"}`}
-      ></div> */}
+    <div
+      className={`border-2 rounded-lg overflow-hidden shadow relative group w-full h-full`}
+    >
       <div
         className={`w-full h-full border-lg ${
           isDragging ? "invisible" : "visible"
