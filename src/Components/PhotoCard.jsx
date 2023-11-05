@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import Photo from "./Photo";
 const PhotoCard = forwardRef(
+  // ref is used for dnd-kit to get the node of the component -- got from dnd-kit docs
   ({ image, index, isDragging, faded, style, ...props }, ref) => {
     const moreStyles = {
       opacity: faded ? "0.2" : "1",

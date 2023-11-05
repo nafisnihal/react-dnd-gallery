@@ -55,7 +55,9 @@ const Gallery = () => {
             </p>
           </div>
         ) : (
-          <h1 className="pb-4 ps-5 text-xl font-bold">Gallery</h1>
+          <h1 className="p-0 md:pb-4 md:ps-5 text-xl font-bold text-center md:text-left">
+            Gallery
+          </h1>
         )}
         <button
           className={`text-red-500 font-semibold pb-3 pr-8 ${
@@ -67,6 +69,7 @@ const Gallery = () => {
         </button>
       </div>
       <hr />
+      {/* main gallery component */}
       <div className="p-5">
         <SortableGallery
           images={images}
