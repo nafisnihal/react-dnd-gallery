@@ -97,7 +97,7 @@ const SortableGallery = ({ images, handleSelect, isChecked }) => {
                   // using ternary operator to check if image is selected or not and show checkbox accordingly and hover effect
                   className={`absolute top-4 left-4 w-5 h-5 cursor-pointer z-50 group-hover:opacity-100 ${
                     isChecked?.includes(imageData?.id)
-                      ? "opacity-100"
+                      ? "opacity-100 contrast-150"
                       : "opacity-0"
                   } transition-all duration-400 ease-in-out`}
                   onChange={() => handleSelect(imageData?.id)}

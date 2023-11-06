@@ -62,7 +62,7 @@ const Gallery = () => {
         <button
           className={`text-red-500 font-semibold pb-3 pr-8 ${
             totalSelected < 1 && "invisible"
-          } hover:text-red-700 transition-all duration-300 ease-in-out`}
+          } hover:text-red-700 transition-colors duration-300 ease-in-out`}
           onClick={handleDelete}
         >
           Delete {totalSelected > 1 ? "Files " : "File "}
