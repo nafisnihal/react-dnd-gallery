@@ -10,7 +10,7 @@ const Photo = ({ image, isDragging }) => {
           isDragging ? "invisible" : "visible"
         }`}
       >
-        <img src={image?.image} alt="image" className="w-full" />
+        <img src={image?.image} alt="" className="w-full" />
       </div>
     </div>
   );
