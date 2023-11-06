@@ -3,13 +3,9 @@ import React from "react";
 const Photo = ({ image, isDragging }) => {
   return (
     <div
-      className={`border-2 rounded-lg overflow-hidden shadow relative group w-full h-full`}
+      className={`border rounded-lg overflow-hidden shadow relative group w-full h-full cursor-grab`}
     >
-      <div
-        className={`w-full h-full border-lg ${
-          isDragging ? "invisible" : "visible"
-        }`}
-      >
+      <div className={`w-full h-full ${isDragging ? "invisible" : "visible"}`}>
         <img src={image?.image} alt="" className="w-full" />
       </div>
     </div>
